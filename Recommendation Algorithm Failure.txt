@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TOTAL_RECOMMENDATIONS 100
+#define FAILURE_PROBABILITY 0.02
+
+int main() {
+    int failed_recommendations = 0;
+    srand(time(NULL)); // Seed the random number generator
+
+    for (int i = 0; i < TOTAL_RECOMMENDATIONS; i++) {
+        if ((double)rand() / RAND_MAX < FAILURE_PROBABILITY) {
+            failed_recommendations++;
+        }
+    }
+
+    printf("Total Recommendations: %d\n", TOTAL_RECOMMENDATIONS);
+    printf("Failed Recommendations: %d\n", failed_recommendations);
+    return 0;
+}

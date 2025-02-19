@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define WAREHOUSES 5
+#define LOCATIONS 10
+#define INF INT_MAX
+
+// Function to find the vertex with the minimum distance value
+int minDistance(int dist[], int visited[], int size) {
+    int min = INF, min_index;
+    for (int v = 0; v < size; v++) {
+        if (!visited[v] && dist[v] <= min) {
+            min = dist[v], min_index = v;
+        }
+    }
+    return min_index;
+}
+
+// Dijkstra's Algorithm to find shortest paths
+void dijkstra(int graph[WAREHOUSES + LOCATIONS][WAREHOUSES + LOCATIONS], int src, int size) {
+    int dist[size];
+    int visited[size];
+    for (int i = 0; i < size; i++) {
+        dist[i] = INF;
+        visited[i] = 0;
+    }
+    dist[src] = 0;
+    
+    for (int count = 0; count < size - 1; count++) {
+        int u = minDistance(dist, visited, size);
+        visited[u] = 1;
+        
+        for (int v = 0; v < size; v++) {
+            if (!visited[v] && graph[u][v] && dist[u] != INF && dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+    
+    printf("Shortest distances from warehouse %d:\n", src + 1);
+    for (int i = 0; i < size; i++) {
+        printf("To location %d: %d\n", i + 1, dist[i]);
+    }
+}
+
+int main() {
+    int graph[WAREHOUSES + LOCATIONS][WAREHOUSES + LOCATIONS] = {
+        {0, 10, 20, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF},
+        {10, 0, 15, INF, INF, 30, INF, INF, INF, INF, INF, INF, INF, INF, INF},
+        {20, 15, 0, 25, INF, INF, 35, INF, INF, INF, INF, INF, INF, INF, INF},
+        {INF, INF, 25, 0, 30, INF, INF, 40, INF, INF, INF, INF, INF, INF, INF},
+        {INF, INF, INF, 30, 0, INF, INF, INF, 45, INF, INF, INF, INF, INF, INF},
+        {INF, 30, INF, INF, INF, 0, 50, INF, INF, INF, 55, INF, INF, INF, INF},
+        {INF, INF, 35, INF, INF, 50, 0, INF, INF, INF, INF, 60, INF, INF, INF},
+        {INF, INF, INF, 40, INF, INF, INF, 0, INF, INF, INF, INF, 65, INF, INF},
+        {INF, INF, INF, INF, 45, INF, INF, INF, 0, 70, INF, INF, INF, INF, INF},
+        {INF, INF, INF, INF, INF, INF, INF, INF, 70, 0, INF, INF, INF, INF, 75},
+        {INF, INF, INF, INF, INF, 55, INF, INF, INF, INF, 0, 80, INF, INF, INF},
+        {INF, INF, INF, INF, INF, INF, 60, INF, INF, INF, 80, 0, 85, INF, INF},
+        {INF, INF, INF, INF, INF, INF, INF, 65, INF, INF, INF, 85, 0, 90, INF},
+        {INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, 90, 0, 95},
+        {INF, INF, INF, INF, INF, INF, INF, INF, INF, 75, INF, INF, INF, 95, 0}
+    };
+    
+    for (int i = 0; i < WAREHOUSES; i++) {
+        dijkstra(graph, i, WAREHOUSES + LOCATIONS);
+    }
+    
+    return 0;
+}

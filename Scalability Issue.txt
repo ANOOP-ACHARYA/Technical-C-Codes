@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+#define MAX_USERS 500000
+#define SIMULATION_USERS 510000  // Simulating more than the limit
+
+int concurrent_users = 0;
+pthread_mutex_t lock;
+
+void* user_session(void* arg) {
+    pthread_mutex_lock(&lock);
+    if (concurrent_users >= MAX_USERS) {
+        printf("Platform Crashed! Maximum concurrent users exceeded.\n");
+        exit(EXIT_FAILURE);
+    }
+    concurrent_users++;
+    pthread_mutex_unlock(&lock);
+    return NULL;
+}
+
+int main() {
+    pthread_t threads[SIMULATION_USERS];
+    pthread_mutex_init(&lock, NULL);
+    
+    for (int i = 0; i < SIMULATION_USERS; i++) {
+        if (pthread_create(&threads[i], NULL, user_session, NULL) != 0) {
+            perror("Failed to create thread");
+            return 1;
+        }
+    }
+    
+    for (int i = 0; i < SIMULATION_USERS; i++) {
+        pthread_join(threads[i], NULL);
+    }
+    
+    pthread_mutex_destroy(&lock);
+    printf("Simulation completed. Current concurrent users: %d\n", concurrent_users);
+    return 0;
+}

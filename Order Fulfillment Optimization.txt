@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+#define TOTAL_LINES 1000000
+#define INITIAL_DEBT_PER_LINE 0.1
+#define REDUCTION_RATE 0.02  
+#define MAX_CYCLES 50
+
+int main() {
+    double total_debt = TOTAL_LINES * INITIAL_DEBT_PER_LINE;
+    int cycle = 0;
+    
+    printf("Initial Technical Debt: %.2f\n", total_debt);
+    
+    while (total_debt > 0.01 && cycle < MAX_CYCLES) {
+        double reduction = total_debt * REDUCTION_RATE;
+        total_debt -= reduction;
+        cycle++;
+        printf("Cycle %d: Remaining Technical Debt: %.2f\n", cycle, total_debt);
+    }
+    
+    printf("Technical Debt Reduction Completed in %d Cycles.\n", cycle);
+    return 0;
+}

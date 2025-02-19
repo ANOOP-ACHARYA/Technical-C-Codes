@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define STAGES 5
+#define ORDERS 100
+
+// Simulating order fulfillment stages with optimized time allocation
+const char* stage_names[STAGES] = {
+    "Order Receipt",
+    "Inventory Allocation",
+    "Packaging",
+    "Shipping",
+    "Delivery"
+};
+
+// Optimized time delays for each stage (in seconds)
+int stage_delays[STAGES] = {2, 3, 4, 5, 6};
+
+void simulate_fulfillment(int order_id) {
+    printf("Processing Order %d\n", order_id);
+    int total_time = 0;
+    for (int i = 0; i < STAGES; i++) {
+        total_time += stage_delays[i];
+        printf("Stage: %s, Time Taken: %d seconds\n", stage_names[i], stage_delays[i]);
+    }
+    printf("Total Order Fulfillment Time: %d seconds\n\n", total_time);
+}
+
+int main() {
+    srand(time(NULL));
+    
+    for (int i = 1; i <= ORDERS; i++) {
+        simulate_fulfillment(i);
+    }
+    
+    return 0;
+}

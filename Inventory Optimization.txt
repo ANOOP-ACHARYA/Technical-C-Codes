@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define WAREHOUSES 10
+#define MAX_CAPACITY 1000
+#define PRODUCTS 5
+
+// Inventory allocation using dynamic programming
+void optimize_inventory(int capacities[], int demands[], int allocation[WAREHOUSES][PRODUCTS]) {
+    for (int i = 0; i < WAREHOUSES; i++) {
+        for (int j = 0; j < PRODUCTS; j++) {
+            if (demands[j] > 0 && capacities[i] >= demands[j]) {
+                allocation[i][j] = demands[j];
+                capacities[i] -= demands[j];
+                demands[j] = 0;
+            } else {
+                allocation[i][j] = capacities[i];
+                demands[j] -= capacities[i];
+                capacities[i] = 0;
+            }
+        }
+    }
+}
+
+int main() {
+    int capacities[WAREHOUSES] = {500, 800, 600, 700, 900, 1000, 750, 650, 850, 950};
+    int demands[PRODUCTS] = {1200, 500, 700, 800, 600};
+    int allocation[WAREHOUSES][PRODUCTS] = {0};
+    
+    optimize_inventory(capacities, demands, allocation);
+    
+    printf("Optimized Inventory Allocation:\n");
+    for (int i = 0; i < WAREHOUSES; i++) {
+        printf("Warehouse %d: ", i + 1);
+        for (int j = 0; j < PRODUCTS; j++) {
+            printf("%d ", allocation[i][j]);
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
